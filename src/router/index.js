@@ -9,13 +9,14 @@ import Login from "@/components/pages/Login";
 import Products from "@/components/pages/Products";
 import CustomerOrder from "@/components/pages/CustomerOrders";
 
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
     routes: [
         {
-            path: "*",
-            redirect: "/login",
+            path: "*",//*星號可避免別人直接進入
+            redirect: "/",
         },
         {
             name: "Login",//元件呈現的名稱

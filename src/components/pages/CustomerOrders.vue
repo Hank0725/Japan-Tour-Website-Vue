@@ -1,83 +1,156 @@
 <template>
-    <div>
-        <loading :active.sync="isLoading"></loading>
-        <div class="row mt-4">
-            <div class="col-md-4 mb-4" v-for="item in products" :key="item.id">
-  <div class="card border-0 shadow-sm">
-    <div 
-    style="height:150px; background-size:over;background-position:center"
-    :style="{backgroundImage:`url(${item.imageUrl})`}"
-      >
-    </div>
-    <div class="card-body">
-      <span class="badge badge-secondary float-right ml-2">{{item.category}}</span>
-      <h5 class="card-title">
-        <a href="#" class="text-dark">{{item.title}}</a>
-      </h5>
-      <p class="card-text">{{item.content}}</p>
-      <div class="d-flex justify-content-between align-items-baseline">
-        <div class="h5" v-if="!item.price">{{item.origin_price | currency}}</div>
-        <del class="h6" v-if="item.price">{{item.origin_price | currency}}</del>
-        <div class="h5" v-if="item.price">{{item.price | currency}}</div>
+  <div>
+    <loading :active.sync="isLoading"></loading>
+    <div class="row mt-4">
+      <div class="col-md-4 mb-4" v-for="item in products" :key="item.id">
+        <div class="card border-0 shadow-sm">
+          <div
+            style="height:150px; background-size:over;background-position:center"
+            class="img-fluid"
+            :style="{backgroundImage:`url(${item.imageUrl})`}"
+          ></div>
+          <div class="card-body">
+            <span class="badge badge-secondary float-right ml-2">{{item.category}}</span>
+            <h5 class="card-title">
+              <a href="#" class="text-dark">{{item.title}}</a>
+            </h5>
+            <p class="card-text">{{item.content}}</p>
+            <div class="d-flex justify-content-between align-items-baseline">
+              <div class="h5" v-if="!item.price">{{item.origin_price | currency}}</div>
+              <del class="h6" v-if="item.price">{{item.origin_price | currency}}</del>
+              <div class="h5" v-if="item.price">{{item.price | currency}}</div>
+            </div>
+          </div>
+          <div class="card-footer d-flex">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              @click="getProduct(item.id)"
+            >
+              <i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i> 查看更多
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm ml-auto" @click="addtoCart(product.id, product.num)">
+              <i class="fas fa-spinner fa-spin" v-if="status.loadingItem === item.id"></i> 加到購物車
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="card-footer d-flex">
-      <button type="button" class="btn btn-outline-secondary btn-sm"
-      @click="getProduct(item)">
-        <i class="fas fa-spinner fa-spin"></i>
-        查看更多
-      </button>
-      <button type="button" class="btn btn-outline-danger btn-sm ml-auto">
-        <i class="fas fa-spinner fa-spin"></i>
-        加到購物車
-      </button>
-    </div>
-  </div>
-</div>
+    <!-- 購物Modal -->
+    <div
+      class="modal fade"
+      id="productModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ product.title }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-    </div>
+        <div class="modal-body">
+            <img :src="product.image" class="img-fluid" alt="">
+            <blockquote class="blockquote mt-3">
+              <p class="mb-0">{{ product.content }}</p>
+              <footer class="blockquote-footer text-right">{{ product.description }}</footer>
+            </blockquote>
+            <div class="d-flex justify-content-between align-items-baseline">
+              <div class="h4" v-if="!product.price">{{ product.origin_price }} 元</div>
+              <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
+              <div class="h4" v-if="product.price">現在只要 {{ product.price }} 元</div>
+            </div>
+            <select name class="form-control mt-3" v-model="product.num">
+              <option :value="num" v-for="num in 10" :key="num">選購 {{num}} {{product.unit}}</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <div class="text-muted text-nowrap mr-3">
+              小計
+              <strong>{{ product.num * product.price }}</strong> 元
+              </div>
+              <button type="button"  class="btn btn-primary"  @click="addtoCart(product.id, product.num)">
+              <i class="fas fa-spinner fa-spin" v-if="product.id === status.loadingItem"></i>加到購物車</button>
+            </div>
+            </div>
+        </div>
+   </div>
+<!--購物車列表-->
+   
+
+</div>
 </template>
 
 
 <script>
 import $ from "jquery";
-// import pagination from "../pagintaion";
 
 export default {
   data() {
     return {
       products: [],
-      product:{},
-      isLoading: false,
+      product: {},
+      status:{
+        loadingItem:"",
+      },
+      isLoading: false
     };
   },
   methods: {
-    getProducts() {  
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products`;
+    getProducts() {
       const vm = this;
-    
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products`;
       vm.isLoading = true;
-      this.$http.get(api).then(response => {
-        vm.products = response.data.products;  
-        console.log(response);
+      this.$http.get(url).then(response => {
+        vm.products = response.data.products;
         vm.isLoading = false;
       });
     },
-    getProduct(id){
-   const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${id}`;
+    getProduct(id) {
       const vm = this;
-      vm.isLoading = true;
-      this.$http.get(api).then(response => {
-     
-        vm.product = response.data.product;  
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${id}`;
+      vm.status.loadingItem = id;
+      this.$http.get(url).then(response => {
+        vm.product = response.data.product;
+        $("#productModal").modal("show");
         console.log(response);
-        vm.isLoading = false;
+       vm.status.loadingItem = "";//關閉讀取中的轉圈圈
+      });
+    },
+    addtoCart(id,qty = 1){//ES6預設值，函式沒有數量，則自動帶入1
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+      vm.status.loadingItem = id;
+      const cart ={
+          product_id:id,
+          qty
+      };
+      this.$http.get(url,{data:cart}).then((response) => {
+        vm.product = response.data.product;
+        console.log(response);
+        vm.status.loadingItem = "";//清中讀取中的商品id
+         vm.getCart();
+        $("#productModal").modal("hide");//加入購物車後關閉Modal
+    });
+  },
+  getCart(){
+      const vm = this;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+      vm.isLoading = true;
+      this.$http.get(url).then(response => {
+        vm.products = response.data.products;
+        console.log(response);
+        vm.isLoading = false;    
   });
+  }
   },
-  },
-  
   created() {
     this.getProducts();
-  },
+    this.getCart();
+  }
 };
 </script>
