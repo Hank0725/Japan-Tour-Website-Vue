@@ -1,17 +1,14 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue';
 import axios from "axios";  //主要AJAX套件
 import VueAxios from "vue-axios";//將它轉為Vue的套件
+import "bootstrap";
+
 import App from './App.vue';
 import router from "./router";
-import Home from "@/components/HelloWorld";
-import Dashboard from "@/components/Dashboard";
-
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
-Vue.use(Home);
 axios.defaults.withCredentials = true;
 
 /* eslint-disable no-new */
