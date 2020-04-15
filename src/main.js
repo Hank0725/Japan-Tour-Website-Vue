@@ -9,10 +9,12 @@ import "bootstrap";
 import App from './App.vue';
 import router from "./router";
 import "./bus";
+import currencyFilter from "./filters/currency";
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios);
 Vue.component("Loading",Loading);//全域啟動Loading套件
+Vue.filter("currency",currencyFilter);
 axios.defaults.withCredentials = true;
 
 /* eslint-disable no-new */

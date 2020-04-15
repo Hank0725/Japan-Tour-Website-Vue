@@ -26,8 +26,8 @@
         <tr v-for="(item) in products " :key="item.id">
           <td>{{item.category}}</td>
           <td>{{item.title}}</td>
-          <td class="text-right">{{item.origin_price}}</td>
-          <td class="text-right">{{item.price}}</td>
+          <td class="text-right">{{item.origin_price | currency}}</td>
+          <td class="text-right">{{item.price | currency}}</td>
 
           <td>{{item.unit}}</td>
           <td>
