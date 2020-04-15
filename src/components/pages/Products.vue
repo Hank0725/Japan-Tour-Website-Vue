@@ -16,10 +16,9 @@
           <th>產品名稱</th>
           <th width="120">產品售價</th>
           <th width="120">產品特價</th>
-
           <th width="100">單位</th>
           <th width="100">是否啟用</th>
-          <th width="100">編輯</th>
+          <th width="120">編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -28,8 +27,7 @@
           <td>{{item.title}}</td>
           <td class="text-right">{{item.origin_price | currency}}</td>
           <td class="text-right">{{item.price | currency}}</td>
-
-          <td>{{item.unit}}</td>
+          <td class="text-center">{{item.unit}}</td>
           <td>
             <span v-if="item.is-enabled" class="text-success">啟用</span>
             <span v-else>未啟用</span>
@@ -141,7 +139,7 @@
                   <div class="form-group col-md-6">
                     <label for="category">分類</label>
                     <input
-                      v-model="tempProduct.catrgory"
+                      v-model="tempProduct.category"
                       type="text"
                       class="form-control"
                       id="category"
@@ -356,8 +354,7 @@ export default {
       formData.append("file-to-upload", uploadedFile);
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/upload`;
       vm.status.fileUploading = true;
-      this.$http
-        .post(url, formData, {
+      this.$http.post(url, formData, {
           //用post上傳圖片
           headers: {
             "Content-Type": "multipart/form-data"
@@ -369,15 +366,17 @@ export default {
             //若值為ture存入圖片
             //  vm.tempProduct.imageUrl = response.data.imageUrl;
             //  console.log( vm.tempProduct);
-            vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
+            vm.$set(vm.tempProduct, "imageUrl",response.data.imageUrl);
             //用$set強制寫入Url
             vm.status.fileUploading = false;
           } else {
             this.$bus.$emit("message:push", response.data.message, "danger");
           }
         });
-    }
+    },
+    
   },
+
   created() {
     this.getProducts();
   }

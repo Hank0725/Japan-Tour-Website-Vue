@@ -49,13 +49,12 @@
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <router-link class="nav-link" to="/customer_order">
                   <i class="fas fa-clipboard-list"></i>
                   <span data-feather="file-text">
                     模擬訂單  
                   </span>
-               
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -63,3 +62,6 @@
 
     </div>
 </template>
+
+
+
