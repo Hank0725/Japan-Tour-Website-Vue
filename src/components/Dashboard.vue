@@ -10,16 +10,19 @@
         </main>
       </div>
     </div>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+// import Footer from "./Footer";
 import Alert from "./AlertMessage";
 
 export default {
   components: {
+    // Footer,
     Sidebar,
     Navbar,
     Alert,
