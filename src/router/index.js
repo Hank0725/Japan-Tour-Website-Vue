@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
         {
-            path: "*",//*星號可避免別人直接進入
+            path: "/",//*星號可避免別人直接進入
             redirect: "/",
         },
         {
