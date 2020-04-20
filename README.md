@@ -1,5 +1,7 @@
-# japantourvue
+# JapanTour-vue
+Demo:https://hank0725.github.io/Japan-Tour-Website-Vue/
 
+This website is only use for Demo and education.
 > 
 
 ## Build Setup
