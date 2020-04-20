@@ -16,11 +16,11 @@ export default new VueRouter({
     routes: [
         {
             path: "*",//*星號可避免別人直接進入
-            redirect: "/login",
+            redirect: "/",
         },
         {
             name: "Login",//元件呈現的名稱
-            path: "/login",//對應的虛擬路徑
+            path: "/",//對應的虛擬路徑
             component: Login,//對應的元件
         },
         {

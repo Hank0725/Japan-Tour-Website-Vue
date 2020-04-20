@@ -12,13 +12,13 @@
     <table class="table mt-4">
       <thead>
         <tr>
-          <th width="80">產品分類</th>
+          <th width="120">產品分類</th>
           <th>產品名稱</th>
           <th width="120">產品售價</th>
           <th width="120">產品特價</th>
           <th width="100">單位</th>
           <th width="100">是否啟用</th>
-          <th width="120">編輯</th>
+          <th width="140">編輯</th>
         </tr>
       </thead>
       <tbody>
